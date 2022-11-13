@@ -68,3 +68,37 @@ console.log(jonas.species, matilda.species); // Homo Sapiens Homo Sapiens
 
 console.log(jonas.hasOwnProperty('firstName')); // true
 console.log(jonas.hasOwnProperty('species')); // false - necause this property is not really inside of the Jonas object, it simply has access to it, because it's in the prototype property of person
+// It works because prototype chain
+
+/////////////////////////////////////////////////////////////////////
+///////////////Prototypal Inheritance on Built-In Objects////////////
+/////////////////////////////////////////////////////////////////////
+
+console.log(jonas.__proto__); // This is the prototype of Jonas which is exactly the prototype property of person (contains "calcAge" function and "species" property)
+console.log(jonas.__proto__.__proto__); // This is prototype property of Object (constructor: ƒ Object())
+
+console.log(jonas.__proto__.__proto__.__proto__); // null - because Object.prototype is usually the top scope chain
+
+console.log(Person.prototype.constructor); // Get function itself (ƒ (firstName, birthYear) {...)
+console.dir(Person.prototype.constructor); // Get function (ƒ Person(firstName, birthYear)) - here we see the constructor property points back at Person (name: "Person")
+
+// Prototype of Arrays
+const arr = [3, 6, 6, 5, 6, 9, 9]; // as using new Array === []
+console.log(arr.__proto__); // [constructor: ƒ, at: ƒ, concat: ƒ, copyWithin: ƒ, fill: ƒ, …] here we have all methods of arrays
+
+// Each array not contain all methods, but instead, each array will inherent these methods from it's prototype
+console.log(arr.__proto__ === Array.prototype); // true. The prototype property of the constructor is gonna be the prototype of all the objects by that constructor
+console.log(arr.__proto__.__proto__); // Object.prototype with all methods are  of objects (arr.__proto__ - is itself Object!!!)
+
+// Add method "unique" to all arrays (all arrays wiull inherit this method)
+Array.prototype.unique = function () {
+  return [...new Set(this)];
+};
+console.log(arr.unique()); // [3, 6, 5, 9]
+
+const h1 = document.querySelector('h1');
+console.dir(x => x + 1);
+
+/////////////////////////////////////////////////////////////////////
+////////////////////////CODING CHALLENGE #1//////////////////////////
+/////////////////////////////////////////////////////////////////////
