@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////////
 /////////////Constructor Functions and the new Operator//////////////
 /////////////////////////////////////////////////////////////////////
-
+/*
 // Create a constructor function
 const Person = function (firstName, birthYear) {
   // Instance properties
@@ -102,3 +102,75 @@ console.dir(x => x + 1);
 /////////////////////////////////////////////////////////////////////
 ////////////////////////CODING CHALLENGE #1//////////////////////////
 /////////////////////////////////////////////////////////////////////
+
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(`${this.make} is going at ${this.speed} km/h`);
+};
+
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`${this.make} is going at ${this.speed} km/h`);
+};
+
+const bmw = new Car('BMW', 120);
+const mercedes = new Car('Mercedes', 95);
+
+bmw.accelerate();
+bmw.accelerate();
+bmw.brake();
+bmw.accelerate();
+bmw.brake();
+
+// mercedes.accelerate();
+// mercedes.brake();
+*/
+/////////////////////////////////////////////////////////////////////
+////////////////////////////ES6 Classes//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/*
+// Classes in JavaScript is "syntatic sugar"
+
+// Let's implement person using a class (class is a special type of functions)
+
+// Class expression
+// const PersonCl = class {};
+
+// Class declaration
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+  // Methods will be added to .prototype property
+  calcAge() {
+    console.log(2037 - this.birthYear); // [[Prototype]]:Object calcAge:ƒ calcAge()
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+}
+
+const jessica = new PersonCl('Jessica', 1996);
+console.log(jessica); // PersonCl {firstName: 'Jessica', birthYear: 1996}
+jessica.calcAge(); // 41
+
+console.log(jessica.__proto__); // {constructor: ƒ, calcAge: ƒ}
+console.log(jessica.__proto__ === PersonCl.prototype); // true
+
+// Add the method manually to the prototype
+// PersonCl.prototype.greet = function () {
+//   console.log(`Hey ${this.firstName}`);
+// };
+jessica.greet(); // Hey Jessica
+
+// 1. Classes are NOT hoisted
+// 2. Classes are first citizens
+// 3. Classes are executed in strict mode
+*/
