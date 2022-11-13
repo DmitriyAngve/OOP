@@ -174,3 +174,147 @@ jessica.greet(); // Hey Jessica
 // 2. Classes are first citizens
 // 3. Classes are executed in strict mode
 */
+/////////////////////////////////////////////////////////////////////
+//////////////////////SETTERS AND GETTERS////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+// Every object in JavaScript can have setter and getter properties - these special properties is assessor properties, while normal properties are called data properties
+/*
+// Getters and setters are functions that get and set a value
+
+const account = {
+  owner: 'Jonas',
+  movements: [200, 530, 120, 300],
+
+  // Add getter to that object
+  get latest() {
+    return this.movements.slice(-1).pop();
+  },
+
+  // Every setter needs to have exactly one parameter
+  set latest(mov) {
+    this.movements.push(mov);
+  },
+};
+
+// Use the getter
+console.log(account.latest); // 300
+
+// Use the setter
+account.latest = 50;
+console.log(account.movements); // (5) [200, 530, 120, 300, 50]
+
+// How to work with classes
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+  // Methods will be added to .prototype property
+  calcAge() {
+    console.log(2037 - this.birthYear); // [[Prototype]]:Object calcAge:ƒ calcAge()
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  // Data validation (create s setter for the fullname property which will check is actually a full name)
+  // Set a property that already exist
+  set fullName(name) {
+    console.log(name);
+    // _fullName - not a JavaScript feature (for avoid a naming conflict) - we acually create a new valiable (_fullName)
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  // Create a getter for fullName property (because if jessica object does not exist fullName: property, only _fullName)
+  get fullName() {
+    return this._fullName;
+    // _fullName still here, because we do here in the setter, but we can also compute this fullName
+  }
+}
+
+const jessica = new PersonCl('Jessica Davis', 1996);
+console.log(jessica.age); // 41
+
+// Looks as if it would ve a property of object jessica and not a method
+
+// Get and Set useful for data validation
+
+console.log(jessica);
+
+const walter = new PersonCl('Walter', 1965); // Walter is not a full name!
+const walterWhite = new PersonCl('Walter White', 1965); // Walter White
+*/
+/////////////////////////////////////////////////////////////////////
+/////////////////////////STATIC METHODS//////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/*
+// Array.from is basically just a simple function, but its a function that's attached to the Array constructor
+
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+// Add a static method
+Person.hey = function () {
+  console.log('Hey there 🙋‍♀️');
+  console.log(this);
+};
+Person.hey(); // Hey there 🙋‍♀️ (this is a object that is calling the method)
+const jonas = new Person('Jonas', 1991);
+
+// the Jonas is not in the prototype of the Jonas object
+// jonas.hey(); // jonas.hey is not a function
+
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Instante methods
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  set fullName(name) {
+    console.log(name);
+
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  // Add a STATIC method
+  static hey() {
+    console.log('Hey there 🙋‍♀️');
+    console.log(this);
+  }
+}
+
+PersonCl.hey();
+*/
+
+/////////////////////////////////////////////////////////////////////
+///////////////////////////OBJECT.CREATE/////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+// Create a person class
+const Person
