@@ -310,11 +310,120 @@ class PersonCl {
 }
 
 PersonCl.hey();
-*/
 
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////OBJECT.CREATE/////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
 // Create a person class
-const Person
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  // Create a new method
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+// This will now return a brand new object, that is linked to the prototype that we passed in here.
+// "steven" - is an empty object and will be linked to this PersonProto object which will be its prototype (PersonProto prototype of "steven")
+const steven = Object.create(PersonProto);
+console.log(steven); // {} (with calcAge function)
+
+// Add properties in object "steven"
+// Bad idea:
+steven.name = 'Steven';
+steven.birthYear = 2002;
+
+steven.calcAge(); // 35
+
+console.log(steven.__proto__ === PersonProto); // true
+
+// Add new object
+const sarah = Object.create(PersonProto);
+// Good idea:
+sarah.init('Sarah', 1979);
+// Checking:
+sarah.calcAge(); // 58
+*/
+/////////////////////////////////////////////////////////////////////
+////////////////////////CODING CHALLENGE #2//////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+class CarCL {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+const ford = new CarCL('ford', 120);
+console.log(ford.speedUS); // get read like this
+
+ford.accelerate();
+ford.accelerate();
+ford.brake();
+
+ford.speedUS = 50;
+console.log(ford); // with setter increase by 1.6 (from 50 to 80)
+
+/*
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Instante methods
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  set fullName(name) {
+    console.log(name);
+
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  // Add a STATIC method
+  static hey() {
+    console.log('Hey there 🙋‍♀️');
+    console.log(this);
+  }
+}
+
+PersonCl.hey();
+*/
