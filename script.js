@@ -733,43 +733,56 @@ console.log(acc1.pin);
 /////////////////////////////////////////////////////////////////////
 //////////Encapsulation: Private Class Fields and Methods////////////
 /////////////////////////////////////////////////////////////////////
-
-// Public fields
-// Private fields
-// Public methods
-// Private methods
+/*
+// 1. Public fields
+// 2. Private fields
+// 3. Public methods
+// 4. Private methods
 class Account {
+  // 1. Define a Public fields (not in Prototype, just in Instances)
+  locale = navigator.language; // it's not a variable
+
+  // 2. Private fields
+  #movements = [];
+  #pin;
+
   constructor(owner, currency, pin) {
     this.owner = owner;
     this.currency = currency;
     // Protected property
-    this._pin = pin;
-    this._movements = [];
-    this.locale = navigator.language;
+    this.#pin = pin;
+    // this._movements = [];
+    // this.locale = navigator.language;
 
     console.log(`Thanks for opening an account, ${owner}`);
   }
 
-  // Public interface
+  // 3. Public methods
   getMovements() {
-    return this._movements;
+    return this.#movements;
   }
 
   deposit(val) {
-    this._movements.push(val);
+    this.#movements.push(val);
   }
   withdraw(val) {
     this.deposit(-val);
   }
 
-  _approveLoan(val) {
-    return true;
-  }
   requestLoan(val) {
-    if (this._approveLoan(val)) {
+    if (this.#approveLoan(val)) {
       this.deposit(val);
       console.log(`Loan approved`);
     }
+  }
+
+  // 4. Private methods
+  #approveLoan(val) {
+    return true;
+  }
+
+  static helper() {
+    console.log('Helper');
   }
 }
 
@@ -781,9 +794,148 @@ const acc1 = new Account('Jonas', 'EUR', 1111, []);
 acc1.deposit(250);
 acc1.withdraw(140);
 acc1.requestLoan(1000);
-acc1.approveLoan(1000);
 console.log(acc1.getMovements());
 console.log(acc1);
-console.log(acc1.pin);
+// console.log(acc1.#movements); // SyntaxError: Private field '#movements' must be declared in an enclosing class
+// console.log(acc1.#pin); // SyntaxError: Private field '#pin' must be declared in an enclosing class
+//console.log(acc1.#approveLoan); // SyntaxError: Private field '#approveLoan' must be declared in an enclosing class
+Account.helper();
+*/
 
-////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+///////////////////////////Chaining Methods//////////////////////////
+/////////////////////////////////////////////////////////////////////
+/*
+class Account {
+  // 1. Define a Public fields (not in Prototype, just in Instances)
+  locale = navigator.language;
+
+  // 2. Private fields
+  #movements = [];
+  #pin;
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    // Protected property
+    this.#pin = pin;
+    // this._movements = [];
+    // this.locale = navigator.language;
+
+    console.log(`Thanks for opening an account, ${owner}`);
+  }
+
+  // 3. Public methods
+  getMovements() {
+    return this.#movements;
+  }
+
+  deposit(val) {
+    this.#movements.push(val);
+    return this;
+  }
+  withdraw(val) {
+    this.deposit(-val);
+    return this;
+  }
+
+  requestLoan(val) {
+    if (this.#approveLoan(val)) {
+      this.deposit(val);
+      console.log(`Loan approved`);
+      return this;
+    }
+  }
+
+  // 4. Private methods
+  #approveLoan(val) {
+    return true;
+  }
+
+  static helper() {
+    console.log('Helper');
+  }
+}
+
+const acc1 = new Account('Jonas', 'EUR', 1111, []);
+
+acc1.deposit(250);
+acc1.withdraw(140);
+acc1.requestLoan(1000);
+console.log(acc1.getMovements());
+console.log(acc1);
+Account.helper();
+
+// Chaining
+acc1.deposit(300).deposit(500).withdraw(35).requestLoan(25000).withdraw(4000); // Add "return this" in all this methods
+*/
+
+/////////////////////////////////////////////////////////////////////
+//////////////////////CODING CHALLENGE #4////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+    return this;
+  }
+
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+// Create new class as child of another (of CarCl)
+class EVCl extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, speed);
+    this.#charge = charge;
+  }
+
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    this.speed = 0;
+    return this;
+  }
+
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `${this.make} going at ${this.speed} km/h, with a charge of ${
+        this.#charge
+      } %`
+    );
+    return this;
+  }
+}
+const rivian = new EVCl('Rivian', 120, 23);
+
+rivian
+  .accelerate()
+  .accelerate()
+  .brake()
+  .accelerate()
+  .brake()
+  .chargeBattery(50)
+  .accelerate()
+  .accelerate()
+  .accelerate()
+  .accelerate();
+
+console.log(rivian.speedUS);
