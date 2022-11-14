@@ -391,14 +391,14 @@ console.log(ford); // with setter increase by 1.6 (from 50 to 80)
 /////////////////////////////////////////////////////////////////////
 /////////Inheritance Between "Classes": Constructor Functions////////
 /////////////////////////////////////////////////////////////////////
-
+/*
 const Person = function (firstName, birthYear) {
   this.firstName = firstName;
   this.birthYear = birthYear;
 };
 
 Person.prototype.calcAge = function () {
-  console.log(2047 - this.birthYear);
+  console.log(2037 - this.birthYear);
 };
 
 const Student = function (firstName, birthYear, course) {
@@ -412,6 +412,10 @@ const Student = function (firstName, birthYear, course) {
   this.course = course;
 };
 
+// Linking prototypes
+// The Student.prototype object is now an object that inherits from Person.prototype. Create conection between Studen and Person
+Student.prototype = Object.create(Person.prototype); // Object.create will return an empty object => strudent.prototype is empty, and onto this empty object we can add methods like "introduce"
+
 // Create the method called introduce
 Student.prototype.introduce = function () {
   console.log(`My name is ${this.firstName} and I study ${this.course}`);
@@ -422,7 +426,103 @@ const mike = new Student('Mike', 2020, 'Computer Science');
 
 // Let's use new introduce method
 mike.introduce(); // My name is Mike and I study Computer Science
+mike.calcAge(); // 17 Js find this method because "Student.prototype = Object.create(Person.prototype);"
 
+console.log(mike.__proto__); // Person object with introduce method
+console.log(mike.__proto__.__proto__); // Prototype object with calcAge function
+
+// It point back to Person
+console.log(Student.prototype.constructor);
+// JS thinks that the construcot of Studen.Prototype is Person (because we using Object.create)
+
+// Let's fix that:
+Student.prototype.constructor = Student;
+console.dir(Student.prototype.constructor);
+
+console.log(mike instanceof Student); // true
+console.log(mike instanceof Person); // true
+console.log(mike instanceof Object); // true
+
+// mike -> Student -> Person -> Object -> Person -> Object -> Object -> Object ->  null
+*/
+/*
+
+
+// Try to explain for yourself
 const dima = new Person('Dima', 1988, 'Frontend');
 console.log(mike.__proto__); // Nesting depth to __proto__: null - 3
 console.log(mike.__proto__.__proto__); // Nesting depth to __proto__: null - 2
+// In other words mike.__proto__: Student.prototype -> Student.prototype.__proto__: Person.prototype -> Person.prototype.__proto__: null
+console.log(mike.__proto__);
+console.log(Student.prototype);
+console.log(Person.prototype);
+console.log(Person.prototype.__proto__); // null
+*/
+
+// class Samurai {
+//   constructor(name) {
+//     this.name = name;
+//   }
+//   hello() {
+//     alert(this.name);
+//   }
+// }
+// let shogun = new Samurai('Dima');
+// console.log(shogun.__proto__.__proto__ === Object.prototype);
+// console.log(shogun.__proto__.constructor.__proto__ === Function.prototype);
+// console.log(shogun.__proto__.__proto__.__proto__ === null);
+
+/////////////////////////////////////////////////////////////////////
+////////////////////////CODING CHALLENGE #3//////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.accelerate = function () {
+  this.speed += 10;
+  console.log(`${this.make} is going at ${this.speed} km/h`);
+};
+
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`${this.make} is going at ${this.speed} km/h`);
+};
+
+// Create new class as child of another (of Car)
+const EV = function (make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+};
+
+// Link the prototypes
+EV.prototype = Object.create(Car.prototype);
+
+// Implement a new methods
+EV.prototype.chargeBattery = function (chargeTo) {
+  this.charge = chargeTo;
+};
+
+EV.prototype.accelerate = function () {
+  this.speed += 20;
+  this.charge--;
+  console.log(
+    `${this.make} going at ${this.speed} km/h, with a charge of ${this.charge} %`
+  );
+};
+
+const tesla = new EV('Tesla', 120, 23);
+tesla.chargeBattery(90);
+console.log(tesla);
+
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.accelerate();
+tesla.brake();
