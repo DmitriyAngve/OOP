@@ -352,7 +352,7 @@ sarah.calcAge(); // 58
 /////////////////////////////////////////////////////////////////////
 ////////////////////////CODING CHALLENGE #2//////////////////////////
 /////////////////////////////////////////////////////////////////////
-
+/*
 class CarCL {
   constructor(make, speed) {
     this.make = make;
@@ -386,44 +386,43 @@ ford.brake();
 
 ford.speedUS = 50;
 console.log(ford); // with setter increase by 1.6 (from 50 to 80)
-
-/*
-class PersonCl {
-  constructor(fullName, birthYear) {
-    this.fullName = fullName;
-    this.birthYear = birthYear;
-  }
-
-  // Instante methods
-  calcAge() {
-    console.log(2037 - this.birthYear);
-  }
-
-  greet() {
-    console.log(`Hey ${this.firstName}`);
-  }
-
-  get age() {
-    return 2037 - this.birthYear;
-  }
-
-  set fullName(name) {
-    console.log(name);
-
-    if (name.includes(' ')) this._fullName = name;
-    else alert(`${name} is not a full name!`);
-  }
-
-  get fullName() {
-    return this._fullName;
-  }
-
-  // Add a STATIC method
-  static hey() {
-    console.log('Hey there 🙋‍♀️');
-    console.log(this);
-  }
-}
-
-PersonCl.hey();
 */
+
+/////////////////////////////////////////////////////////////////////
+/////////Inheritance Between "Classes": Constructor Functions////////
+/////////////////////////////////////////////////////////////////////
+
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+Person.prototype.calcAge = function () {
+  console.log(2047 - this.birthYear);
+};
+
+const Student = function (firstName, birthYear, course) {
+  // this.firstName = firstName;
+  // this.birthYear = birthYear;
+  // Replace the code above with this
+  // Person(firstName, birthYear); // doesn't work - because this person constructor function as a regular function call (this function is simply regular function call) this keyword in regular function call is set to undefined
+
+  // make Person(firstName, birthYear) work
+  Person.call(this, firstName, birthYear); // call method will indeed cal lthis function but we will be able to specify the this keyword
+  this.course = course;
+};
+
+// Create the method called introduce
+Student.prototype.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const mike = new Student('Mike', 2020, 'Computer Science');
+// console.log(mike);
+
+// Let's use new introduce method
+mike.introduce(); // My name is Mike and I study Computer Science
+
+const dima = new Person('Dima', 1988, 'Frontend');
+console.log(mike.__proto__); // Nesting depth to __proto__: null - 3
+console.log(mike.__proto__.__proto__); // Nesting depth to __proto__: null - 2
