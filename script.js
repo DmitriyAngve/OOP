@@ -475,7 +475,7 @@ console.log(Person.prototype.__proto__); // null
 /////////////////////////////////////////////////////////////////////
 ////////////////////////CODING CHALLENGE #3//////////////////////////
 /////////////////////////////////////////////////////////////////////
-
+/*
 const Car = function (make, speed) {
   this.make = make;
   this.speed = speed;
@@ -516,13 +516,113 @@ EV.prototype.accelerate = function () {
 const tesla = new EV('Tesla', 120, 23);
 tesla.chargeBattery(90);
 console.log(tesla);
+tesla.accelerate();
+tesla.accelerate();
+*/
 
-tesla.accelerate();
-tesla.accelerate();
-tesla.accelerate();
-tesla.accelerate();
-tesla.accelerate();
-tesla.accelerate();
-tesla.accelerate();
-tesla.accelerate();
-tesla.brake();
+/////////////////////////////////////////////////////////////////////
+/////////////Inheritance Between "Classes": ES6 Classes//////////////
+/////////////////////////////////////////////////////////////////////
+
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Instante methods
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hey ${this.firstName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  set fullName(name) {
+    console.log(name);
+
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name!`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  // Add a STATIC method
+  static hey() {
+    console.log('Hey there 🙋‍♀️');
+  }
+}
+
+// To  inheritance between ES6 classes need two things: extend keywords and the super function
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    // Allways needs to happen first!
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(`My name is ${this.fullName} and I study ${this.course}`);
+  }
+
+  // Let's overwrite calcAge method
+  calcAge() {
+    console.log(
+      `I'm ${
+        2037 - this.birthYear
+      } years old, but as a student I feel more like ${
+        2037 - this.birthYear + 10
+      }`
+    ); // New calcAge method appears first in the prototype chain (overwrite old method)
+  }
+}
+
+const martha = new StudentCl('Martha Jonas', 2012, 'Comptuter Science');
+martha.introduce(); // My name is Martha Jonas and I study Comptuter Science
+martha.calcAge(); // 25
+
+/////////////////////////////////////////////////////////////////////
+/////////////Inheritance Between "Classes": Object.create////////////
+/////////////////////////////////////////////////////////////////////
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+
+// If student inherit directly from person
+const StudentProto = Object.create(PersonProto); // PersonProto now is prototype of StudentProto
+// Now we can use StudentProto to create new students
+
+// Add init-method to StudentProto
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+//Let's create new student
+const jay = Object.create(StudentProto); // StudentProto object is now the prototype of "jay"
+
+// jay -> StudentProto -> PersonProto
+
+StudentProto.introduce = function () {
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+jay.init('Jay', 2010, 'Computer Science');
+jay.introduce(); // My name is Jay and I study Computer Science
+jay.calcAge(); // 27
